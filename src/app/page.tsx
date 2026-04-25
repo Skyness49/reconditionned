@@ -139,6 +139,7 @@ textarea{resize:vertical;min-height:40px;}
 .s-atelier{background:#fef3c7;color:var(--orange);}
 .s-reserve{background:#ede9fe;color:var(--purple);}
 .s-vendu{background:#fee2e2;color:var(--red);}
+.s-amv{background:#fef9c3;color:#854d0e;}
 .pc-card-body{padding:11px 13px;}
 .pc-specs-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
 .pc-spec-tag{background:#e8f0f5;color:var(--blue);font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;}
@@ -299,7 +300,6 @@ const BODY_HTML = `
     <div class="diag-section">
       <div class="diag-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Infos PC</div>
       <table class="diag-table">
-        <tr><td>N° de série</td><td><input type="text" id="d-serial" placeholder="CV06012500001934" oninput="calcPrices()"></td></tr>
         <tr><td>Modèle</td><td><input type="text" id="d-model" placeholder="PC HP ProBook G7"></td></tr>
         <tr><td>Référence</td><td><input type="text" id="d-ref" placeholder="NCNRCX03K339503"></td></tr>
         <tr><td>CPU</td><td><input type="text" id="d-cpu" placeholder="Intel Core I5-10210U"></td></tr>
@@ -649,6 +649,7 @@ const BODY_HTML = `
         <div class="card-title">Statut</div>
         <select id="f-status">
           <option value="vente">En vente</option>
+          <option value="amv">À mettre en vente</option>
           <option value="atelier">À l'atelier</option>
           <option value="reserve">Réservé</option>
           <option value="vendu">Vendu</option>
@@ -710,6 +711,7 @@ const BODY_HTML = `
         <label>Statut</label>
         <select id="edit-status">
           <option value="vente">En vente</option>
+          <option value="amv">À mettre en vente</option>
           <option value="atelier">À l'atelier</option>
           <option value="reserve">Réservé</option>
           <option value="vendu">Vendu</option>
@@ -960,10 +962,12 @@ function showApp() {
   document.getElementById('app').style.display = 'block';
   document.getElementById('nav-username').textContent = currentUser.name;
   document.getElementById('nav-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  updateCount();
   document.getElementById('d-date').value = new Date().toISOString().split('T')[0];
-  if (typeof apiLoadParc !== 'undefined') {
-    apiLoadParc().then(function(ok){ if(!ok){parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();} checkHash(); });
-  } else { parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]'); updateCount(); checkHash(); }
+  setTimeout(initCPUAutocomplete, 200);
+  if(typeof apiLoadParc!=='undefined'){
+    apiLoadParc().then(function(ok){if(!ok){parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();}checkHash();});
+  } else { parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();checkHash(); }
 }
 
 function doLogout() {
@@ -1033,6 +1037,109 @@ function calcEditPrices() {
   var mEl = document.getElementById('edit-calc-marge');
   mEl.textContent = (achat && venteHT) ? marge.toFixed(2)+'€' : '—';
   mEl.className = 'price-calc-val ' + (marge >= 0 ? 'green' : 'red');
+}
+
+
+
+// ══ CPU AUTOCOMPLETE ══
+var CPU_DB = [
+  // Intel Core i3
+  'Intel Core I3-12100','Intel Core I3-12300','Intel Core I3-13100','Intel Core I3-13300',
+  'Intel Core I3-14100','Intel Core I3-10100','Intel Core I3-10300','Intel Core I3-1115G4',
+  // Intel Core i5
+  'Intel Core I5-10210U','Intel Core I5-10400','Intel Core I5-10500','Intel Core I5-10600',
+  'Intel Core I5-11400','Intel Core I5-11600K','Intel Core I5-12400','Intel Core I5-12500',
+  'Intel Core I5-12600K','Intel Core I5-13400','Intel Core I5-13500','Intel Core I5-13600K',
+  'Intel Core I5-14400','Intel Core I5-14500','Intel Core I5-14600K',
+  // Intel Core i7
+  'Intel Core I7-10700','Intel Core I7-10750H','Intel Core I7-10850H',
+  'Intel Core I7-11700','Intel Core I7-11800H','Intel Core I7-12700','Intel Core I7-12700H',
+  'Intel Core I7-12700K','Intel Core I7-1260P','Intel Core I7-1265U',
+  'Intel Core I7-13700','Intel Core I7-13700H','Intel Core I7-13700K',
+  'Intel Core I7-14700','Intel Core I7-14700H','Intel Core I7-14700K',
+  // Intel Core i9
+  'Intel Core I9-10900','Intel Core I9-11900K','Intel Core I9-12900K',
+  'Intel Core I9-13900K','Intel Core I9-14900K',
+  // AMD Ryzen 3
+  'AMD Ryzen 3 3200G','AMD Ryzen 3 4300G','AMD Ryzen 3 5300G','AMD Ryzen 3 7300X',
+  // AMD Ryzen 5
+  'AMD Ryzen 5 3600','AMD Ryzen 5 4500','AMD Ryzen 5 4600G','AMD Ryzen 5 5500',
+  'AMD Ryzen 5 5600','AMD Ryzen 5 5600G','AMD Ryzen 5 5600X','AMD Ryzen 5 7500F',
+  'AMD Ryzen 5 7600','AMD Ryzen 5 7600X',
+  // AMD Ryzen 7
+  'AMD Ryzen 7 3700X','AMD Ryzen 7 4700G','AMD Ryzen 7 5700G','AMD Ryzen 7 5700X',
+  'AMD Ryzen 7 5800H','AMD Ryzen 7 5800X','AMD Ryzen 7 5800X3D',
+  'AMD Ryzen 7 7700','AMD Ryzen 7 7700X','AMD Ryzen 7 7745HX',
+  'AMD Ryzen 7 7800X3D','AMD Ryzen 7 7840H',
+  // AMD Ryzen 9
+  'AMD Ryzen 9 5900X','AMD Ryzen 9 5950X','AMD Ryzen 9 7900X','AMD Ryzen 9 7950X',
+  'AMD Ryzen 9 7945HX'
+];
+
+function initCPUAutocomplete() {
+  var input = document.getElementById('d-cpu');
+  if (!input) return;
+  var list = document.createElement('div');
+  list.id = 'cpu-autocomplete';
+  list.style.cssText = 'position:absolute;z-index:999;background:#fff;border:1px solid #e0e4ee;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-height:200px;overflow-y:auto;width:100%;display:none;';
+  input.parentNode.style.position = 'relative';
+  input.parentNode.appendChild(list);
+
+  input.addEventListener('input', function() {
+    var q = input.value.trim().toLowerCase();
+    list.innerHTML = '';
+    if (q.length < 2) { list.style.display='none'; return; }
+    var matches = CPU_DB.filter(function(cpu){ return cpu.toLowerCase().includes(q); }).slice(0,8);
+    if (!matches.length) { list.style.display='none'; return; }
+    matches.forEach(function(cpu) {
+      var item = document.createElement('div');
+      item.textContent = cpu;
+      item.style.cssText = 'padding:8px 12px;font-size:11px;cursor:pointer;border-bottom:1px solid #f0f0f0;font-family:Montserrat,Arial,sans-serif;';
+      item.onmouseenter = function(){ this.style.background='#f0f4fb'; };
+      item.onmouseleave = function(){ this.style.background=''; };
+      item.onclick = function() {
+        input.value = cpu;
+        list.style.display = 'none';
+        if (typeof upd === 'function') upd();
+        if (typeof updateCodeArticle === 'function') updateCodeArticle();
+      };
+      list.appendChild(item);
+    });
+    list.style.display = 'block';
+  });
+  document.addEventListener('click', function(e){ if(e.target!==input) list.style.display='none'; });
+}
+
+// Init autocomplete when app loads
+
+// ══ SMART SPEC EXTRACTION ══
+function extractRAM(raw) {
+  if (!raw) return raw;
+  // "16GB DDR5 Kingston 5600MHz" → "16 Go DDR5"
+  var m = raw.match(/(\\d+)\\s*[Gg][Bo]/);
+  var size = m ? m[1] + ' Go' : '';
+  var gen = raw.match(/DDR[45]L?|LPDDR[45]L?/i);
+  var genStr = gen ? gen[0].toUpperCase() : '';
+  return [size, genStr].filter(Boolean).join(' ') || raw;
+}
+function extractSSD(raw) {
+  if (!raw) return raw;
+  // "Kingston SA400S37480G 480Go SSD" → "SSD 480 Go"
+  var m = raw.match(/(\\d+)\\s*[Gg][Bo]/);
+  var size = m ? m[1] + ' Go' : '';
+  var isSSD = /SSD|NVMe|M\\.2/i.test(raw);
+  var isHDD = /HDD|Disque dur/i.test(raw);
+  var type = isSSD ? 'SSD' : isHDD ? 'HDD' : 'SSD';
+  return size ? type + ' ' + size : raw;
+}
+function extractCPU(raw) {
+  if (!raw) return raw;
+  // "Intel Core i7-14700K 3.4GHz" → "Intel Core I7-14700K"
+  // Keep brand + model, remove freq
+  var clean = raw.replace(/\\s*@?\\s*\\d+\\.\\d+\\s*[Gg][Hh]z\\b/gi, '').trim();
+  // Capitalize CPU model
+  clean = clean.replace(/\\b(i[3579]|ryzen\\s*[3579]|xeon|celeron|pentium|athlon)/gi, function(m){ return m.toUpperCase(); });
+  return clean;
 }
 
 // ══ BARCODE ══
@@ -1231,7 +1338,11 @@ function dv(id){ var el=document.getElementById(id); return el?el.value.trim():'
 function dc(id){ var el=document.getElementById(id); return el?el.checked:false; }
 
 function diagGetSpecs() {
-  var specs=[{key:'cpu',val:dv('d-cpu')||'—'},{key:'ram',val:dv('d-ram')||'—'},{key:'ssd',val:dv('d-ssd')||'—'}];
+  var specs=[
+    {key:'cpu',    val:extractCPU(dv('d-cpu'))||'—'},
+    {key:'ram',    val:extractRAM(dv('d-ram'))||'—'},
+    {key:'ssd',    val:extractSSD(dv('d-ssd'))||'—'}
+  ];
   var sc=dv('d-screen'), gpu=dv('d-gpu');
   if(sc) specs.push({key:'screen',val:sc});
   if(gpu) specs.push({key:'gpu',val:gpu});
@@ -1255,17 +1366,47 @@ function buildDiagData() {
     tech:dv('d-tech'), notes:'', docs:[],
     diag:{
       hw:{memtest:dc('d-memtest'),smart:dc('d-smart'),screenshot:dc('d-screenshot'),firmware:dc('d-firmware'),bios:dc('d-bios'),pile:dc('d-pile'),depoussierage:dc('d-depoussierage'),thermique:dc('d-thermique'),temp:dc('d-temp'),batterie:dc('d-batterie'),plasturgie:dc('d-plasturgie'),obs:dv('d-obs-hw'),batterieNiveau:dv('d-batterie-niveau'),tempVal:dv('d-temp-val'),biosVer:dv('d-bios-ver'),firmwareVer:dv('d-firmware-ver'),plasturgieEtat:dv('d-plasturgie-etat')},
-      sys:{premier:dc('d-1ere'),demarrage:dc('d-demarrage'),pilotes:dc('d-pilotes'),alim:dc('d-alim'),antivirus:dc('d-antivirus'),logiciels:dc('d-logiciels'),nettoyage:dc('d-nettoyage'),activation:dc('d-activation'),logList:dv('d-logiciels-list'),obs:dv('d-obs-sys')}
+      sys:{premier:dc('d-1ere'),demarrage:dc('d-demarrage'),pilotes:dc('d-pilotes'),alim:dc('d-alim'),antivirus:dc('d-antivirus'),logiciels:dc('d-logiciels'),nettoyage:dc('d-nettoyage'),activation:dc('d-activation'),
+      logList:[dc('d-log-firefox')?'Firefox':'',dc('d-log-chrome')?'Chrome':'',dc('d-log-vlc')?'VLC':'',dc('d-log-7zip')?'7-Zip':'',dc('d-log-libre')?'LibreOffice':'',dc('d-log-acrobat')?'Adobe Reader':'',dc('d-log-office')?'Microsoft Office':'',dv('d-logiciels-list')].filter(Boolean).join(', '),
+      obs:dv('d-obs-sys')}
     }
   };
+}
+
+function resetDiagForm() {
+  ['d-model','d-ref','d-cpu','d-ram','d-ssd','d-gpu','d-screen',
+   'd-price','d-prix-achat','d-tech','d-obs-hw','d-obs-sys',
+   'd-batterie-niveau','d-temp-val','d-bios-ver','d-firmware-ver','d-plasturgie-etat'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  ['d-memtest','d-smart','d-screenshot','d-firmware','d-bios','d-pile',
+   'd-depoussierage','d-thermique','d-temp','d-batterie','d-plasturgie',
+   'd-1ere','d-demarrage','d-pilotes','d-alim','d-antivirus','d-logiciels',
+   'd-nettoyage','d-activation',
+   'd-log-firefox','d-log-vlc','d-log-7zip','d-log-libre','d-log-acrobat','d-log-chrome','d-log-office'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.checked=false;
+  });
+  setVerdict('vente','ok');
+  diagAttachments = {};
+  renderDiagAttachmentButtons();
+  var box=document.getElementById('price-calc-box'); if(box) box.style.display='none';
+  var ca=document.getElementById('code-article-text'); if(ca) ca.textContent='Remplis les champs...';
+  var mr=document.getElementById('market-result'); if(mr) mr.innerHTML='';
+  document.getElementById('d-date').value=new Date().toISOString().split('T')[0];
 }
 
 function saveDiagToParc() {
   if (!dv('d-model')) { alert('Remplis au moins le nom du modele'); return; }
   var pc = buildDiagData();
+  pc.diagAttachments = JSON.parse(JSON.stringify(diagAttachments));
   parc.unshift(pc);
   saveParc(); updateCount();
-  toast('PC cree et ajoute au parc !');
+  // Sync API
+  if (typeof apiSavePC !== 'undefined') {
+    apiSavePC(pc).then(function(ok){ toast(ok?'PC synchronise !':'PC cree (hors ligne)'); });
+  }
+  resetDiagForm();
+  toast('PC ajoute au parc !');
   showTab('parc');
 }
 
@@ -1413,8 +1554,8 @@ function buildAttachPreview(attachments) {
 }
 function updateCount(){document.getElementById('parc-count').textContent=parc.length;}
 
-var STATUS_LABEL={vente:'En vente',atelier:'À l\\'atelier',reserve:'Réservé',vendu:'Vendu'};
-var STATUS_CLASS={vente:'s-vente',atelier:'s-atelier',reserve:'s-reserve',vendu:'s-vendu'};
+var STATUS_LABEL={vente:'En vente',amv:'A mettre en vente',atelier:'A l\\'atelier',reserve:'Reserve',vendu:'Vendu'};
+var STATUS_CLASS={vente:'s-vente',amv:'s-amv',atelier:'s-atelier',reserve:'s-reserve',vendu:'s-vendu'};
 
 function setFilter(f,el){
   filterState=f;
@@ -1676,7 +1817,19 @@ function exportDiagPDF(){
 
 function rePrintPC(id){
   var pc=parc.find(function(p){return p.id===id;});if(!pc)return;
-  doPrintLabel(buildLabelHTML({model:pc.model,ref:pc.ref,serial:pc.serial,price:pc.price,os:pc.os,img:pc.img,specs:pc.specs||[]}));
+  // Créer un div temporaire hors écran, générer le label, exporter PNG
+  var tmp=document.createElement('div');
+  tmp.style.cssText='position:fixed;left:-9999px;top:0;width:320px;height:453px;background:#fff;';
+  tmp.innerHTML=buildLabelHTML({model:pc.model,ref:pc.ref,serial:pc.serial,price:pc.price,os:pc.os,img:pc.img,specs:pc.specs||[]});
+  document.body.appendChild(tmp);
+  html2canvas(tmp,{scale:8,useCORS:true,backgroundColor:'#ffffff',logging:false}).then(function(canvas){
+    var a=document.createElement('a');
+    a.download=(pc.model||'etiquette').replace(/\\s+/g,'_')+'_'+(pc.serial||'')+'.png';
+    a.href=canvas.toDataURL('image/png');
+    a.click();
+    document.body.removeChild(tmp);
+    toast('PNG téléchargé !');
+  });
 }
 
 function openLabelPreview(id){
@@ -1763,100 +1916,91 @@ function checkHash(){
   if(hash.startsWith('#upload/')){
     var pcId=parseInt(hash.replace('#upload/',''));
     showUploadPage(pcId);
+    return;
   }
 }
 
-function showUploadPage(pcId){
-  var parcData=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');
-  var pc=parcData.find(function(p){return p.id===pcId;});
-  document.body.innerHTML=[
-    '<div style="font-family:Montserrat,Arial,sans-serif;max-width:420px;margin:0 auto;padding:20px;min-height:100vh;background:#f4f5f7;">',
-    '<div style="background:#0A3782;border-radius:12px;padding:14px;margin-bottom:20px;text-align:center;">',
-    '<img src="'+L_HEADER+'" style="height:40px;width:auto;">',
+function showUploadPage(pcId) {
+  // Show upload UI without requiring login
+  document.body.innerHTML = [
+    '<div style="font-family:Montserrat,Arial,sans-serif;max-width:440px;margin:0 auto;padding:20px;min-height:100vh;background:#f4f5f7;">',
+    '<div style="background:#0A3782;border-radius:10px;padding:14px;margin-bottom:20px;text-align:center;">',
+    '<img src="'+L_HEADER+'" style="height:38px;width:auto;">',
     '</div>',
-    '<h2 style="color:#0A3782;margin-bottom:6px;font-size:18px;font-weight:800;">Upload documents</h2>',
-    '<p style="color:#555;font-size:13px;margin-bottom:4px;font-weight:600;">'+(pc?pc.model:'PC #'+pcId)+'</p>',
-    '<p style="color:#888;font-size:11px;font-family:monospace;margin-bottom:20px;">'+(pc?pc.serial:'')+'</p>',
-    '<label style="display:block;background:#0A3782;color:#fff;padding:16px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:8px;text-align:center;border:none;">',
-    'Choisir fichiers',
-    '<input type="file" accept="image/*,.pdf" multiple style="display:none;" onchange="doUpload(this,'+pcId+')">',
+    '<h2 style="color:#0A3782;margin-bottom:6px;font-size:17px;font-weight:800;">Upload documents</h2>',
+    '<div id="up-pc-info" style="color:#555;font-size:12px;margin-bottom:16px;font-weight:600;">Chargement...</div>',
+    '<label style="display:block;background:#0A3782;color:#fff;padding:14px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px;text-align:center;">',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>Choisir photos / PDF',
+    '<input type="file" accept="image/*,.pdf,.doc,.docx" multiple style="display:none;" onchange="doUpload(this)">',
     '</label>',
-    '<label style="display:block;background:#0096C8;color:#fff;padding:14px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;text-align:center;margin-bottom:16px;">',
-    'Prendre une photo',
-    '<input type="file" accept="image/*" capture="environment" style="display:none;" onchange="doUpload(this,'+pcId+')">',
+    '<label style="display:block;background:#0096C8;color:#fff;padding:12px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;text-align:center;margin-bottom:16px;">',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Prendre une photo',
+    '<input type="file" accept="image/*" capture="environment" style="display:none;" onchange="doUpload(this)">',
     '</label>',
-    '<div id="up-prev" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;"></div>',
-    '<div id="up-status" style="font-size:14px;font-weight:700;text-align:center;min-height:22px;"></div>',
-    '</div>',
-    '<script>',
-    'function doUpload(input,pcId){',
-    '  var files=Array.from(input.files);',
-    '  var prev=document.getElementById("up-prev");',
-    '  var status=document.getElementById("up-status");',
-    '  status.style.color="#d97706";status.textContent="Chargement...";',
-    '  var parc=JSON.parse(localStorage.getItem("ldlc_parc")||"[]");',
-    '  var pc=parc.find(function(p){return p.id==pcId;});',
-    '  if(!pc){status.textContent="Erreur PC introuvable";return;}',
-    '  if(!pc.docs)pc.docs=[];',
-    '  var n=0;',
-    '  files.forEach(function(f){',
-    '    var r=new FileReader();',
-    '    r.onload=function(e){',
-    '      var isImg=f.type.startsWith("image/");',
-    '      pc.docs.push({name:f.name,type:isImg?"image":"pdf",data:e.target.result});',
-    '      if(isImg){var img=document.createElement("img");img.src=e.target.result;img.style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:2px solid #16a34a;";prev.appendChild(img);}',
-    '      n++;',
-    '      if(n===files.length){localStorage.setItem("ldlc_parc",JSON.stringify(parc));status.style.color="#16a34a";status.textContent="OK "+n+" fichier(s) uploade(s) !";}',
-    '    };r.readAsDataURL(f);',
-    '  });',
-    '}',
-    '<\\/script>'
-  ].join('\\n');
-}
+    '<div id="up-preview" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;"></div>',
+    '<div id="up-status" style="font-size:13px;font-weight:700;text-align:center;color:#16a34a;min-height:20px;"></div>',
+    '</div>'
+  ].join('');
 
-
-// ══ DIAGNOSTIC ATTACHMENTS ══
-var diagAttachments = {}; // {checkId: [{name, type, data}]}
-
-function addDiagAttachment(checkId, input) {
-  var files = Array.from(input.files);
-  if (!diagAttachments[checkId]) diagAttachments[checkId] = [];
-  files.forEach(function(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      diagAttachments[checkId].push({
-        name: file.name,
-        type: file.type,
-        data: e.target.result
-      });
-      updateAttachCount(checkId);
-    };
-    reader.readAsDataURL(file);
+  // Load PC info from API
+  fetch('/api/parc').then(function(r){return r.json();}).then(function(parc){
+    var pc = parc.find(function(p){return p.id==pcId;});
+    document.getElementById('up-pc-info').textContent = pc ? (pc.model + (pc.ref?' — '+pc.ref:'')) : 'PC #'+pcId;
+    window._uploadPc = pc;
+    window._uploadParc = parc;
+  }).catch(function(){
+    document.getElementById('up-pc-info').textContent = 'PC #'+pcId;
+    window._uploadParc = [];
   });
-  input.value = '';
-}
 
-function updateAttachCount(checkId) {
-  var count = diagAttachments[checkId] ? diagAttachments[checkId].length : 0;
-  var el = document.getElementById('count-' + checkId);
-  if (el) {
-    el.textContent = count;
-    el.className = 'cb-attach-count' + (count > 0 ? ' has-files' : '');
-  }
-  var btn = document.getElementById('btn-attach-' + checkId);
-  if (btn && count > 0) {
-    btn.style.borderColor = '#0A3782';
-    btn.style.background = '#f0f4fb';
-  }
-}
+  window._uploadPcId = pcId;
 
-function renderDiagAttachmentButtons() {
-  // Reset all counts
-  var allIds = ['d-memtest','d-smart','d-screenshot','d-firmware','d-bios','d-pile',
-    'd-depoussierage','d-thermique','d-temp','d-batterie','d-plasturgie',
-    'd-1ere','d-demarrage','d-pilotes','d-alim','d-antivirus','d-logiciels',
-    'd-nettoyage','d-activation'];
-  allIds.forEach(function(id) { updateAttachCount(id); });
+  window.doUpload = function(input) {
+    var files = Array.from(input.files);
+    var prev = document.getElementById('up-preview');
+    var status = document.getElementById('up-status');
+    status.style.color = '#d97706'; status.textContent = 'Envoi en cours...';
+    var done = 0;
+    var newDocs = [];
+    files.forEach(function(file){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var isImg = file.type.startsWith('image/');
+        newDocs.push({name:file.name, type:isImg?'image':'pdf', data:e.target.result});
+        if(isImg){
+          var img=document.createElement('img');
+          img.src=e.target.result;
+          img.style='width:80px;height:80px;object-fit:cover;border-radius:6px;border:2px solid #16a34a;';
+          prev.appendChild(img);
+        } else {
+          var d=document.createElement('div');
+          d.style='background:#e8f0fb;border:1px solid #c5d5f0;border-radius:6px;padding:6px 10px;font-size:10px;font-weight:600;color:#0A3782;';
+          d.textContent=file.name.substring(0,20);
+          prev.appendChild(d);
+        }
+        done++;
+        if(done===files.length){
+          // Save to API
+          var parc = window._uploadParc || [];
+          var pc = parc.find(function(p){return p.id==window._uploadPcId;});
+          if(pc){
+            if(!pc.docs) pc.docs=[];
+            newDocs.forEach(function(d){pc.docs.push(d);});
+            fetch('/api/parc',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)})
+              .then(function(r){
+                if(r.ok){ status.style.color='#16a34a'; status.textContent='OK '+done+' fichier(s) uploade(s) !'; }
+                else { status.style.color='#dc2626'; status.textContent='Erreur serveur'; }
+              })
+              .catch(function(){ status.style.color='#dc2626'; status.textContent='Erreur reseau'; });
+          } else {
+            status.style.color='#dc2626'; status.textContent='PC introuvable';
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    input.value='';
+  };
 }
 
 window.addEventListener('hashchange',checkHash);
@@ -2021,22 +2165,11 @@ var styleEl = document.createElement('style');
 styleEl.textContent = '@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}';
 document.head.appendChild(styleEl);
 
-// ══ API SYNC ══
-async function apiLoadParc() {
-  try { var r=await fetch('/api/parc'); if(r.ok){parc=await r.json();localStorage.setItem('ldlc_parc',JSON.stringify(parc));updateCount();return true;} } catch(e){}
-  return false;
-}
-async function apiSavePC(pc) {
-  try { var r=await fetch('/api/parc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); if(r.ok){var s=await r.json();pc.id=s.id;return true;} } catch(e){}
-  return false;
-}
-async function apiUpdatePC(pc) {
-  try { var r=await fetch('/api/parc',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); return r.ok; } catch(e){ return false; }
-}
-async function apiDeletePC(id) {
-  try { var r=await fetch('/api/parc',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}); return r.ok; } catch(e){ return false; }
-}
-
+// ══ API ══
+async function apiLoadParc(){try{var r=await fetch('/api/parc');if(r.ok){parc=await r.json();localStorage.setItem('ldlc_parc',JSON.stringify(parc));updateCount();return true;}}catch(e){}return false;}
+async function apiSavePC(pc){try{var r=await fetch('/api/parc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)});if(r.ok){var s=await r.json();pc.id=s.id;return true;}}catch(e){}return false;}
+async function apiUpdatePC(pc){try{var r=await fetch('/api/parc',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)});return r.ok;}catch(e){return false;}}
+async function apiDeletePC(id){try{var r=await fetch('/api/parc',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})});return r.ok;}catch(e){return false;}}
 // ══ INIT ══
 initLogin();
 `;
