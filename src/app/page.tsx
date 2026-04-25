@@ -541,7 +541,20 @@ const BODY_HTML = `
           <span class="cb-attach-count" id="count-d-activation">0</span>
         </div>
       </div>
-      <div style="margin-top:6px;"><label>Logiciels installés</label><input type="text" id="d-logiciels-list" placeholder="Firefox, VLC, 7zip, LibreOffice..."></div>
+      <div style="margin-top:8px;">
+        <div style="font-size:10px;font-weight:700;color:#0A3782;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Logiciels installés</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px;background:#f8fafc;border:1px solid #e8eaed;border-radius:7px;padding:8px;">
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-firefox" style="accent-color:#0A3782;"> Firefox</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-chrome" style="accent-color:#0A3782;"> Chrome</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-vlc" style="accent-color:#0A3782;"> VLC</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-7zip" style="accent-color:#0A3782;"> 7-Zip</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-libre" style="accent-color:#0A3782;"> LibreOffice</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-acrobat" style="accent-color:#0A3782;"> Adobe Reader</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-office" style="accent-color:#0A3782;"> Microsoft Office</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" id="d-log-thunderbird" style="accent-color:#0A3782;"> Thunderbird</label>
+        </div>
+        <input type="text" id="d-logiciels-list" placeholder="Autres logiciels..." style="font-size:11px;">
+      </div>
       <div style="margin-top:6px;"><label>Observations système</label><textarea id="d-obs-sys" rows="2" placeholder="Remarques..."></textarea></div>
     </div>
 
@@ -569,21 +582,7 @@ const BODY_HTML = `
       <div id="code-article-copied" style="font-size:10px;color:var(--green);font-weight:600;margin-top:4px;min-height:14px;"></div>
     </div>
 
-    <div class="diag-section">
-      <div class="diag-section-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        Analyse prix marché
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="btn btn-primary" onclick="analyzeMarket()" id="btn-analyze" style="flex-shrink:0;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:-2px;margin-right:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Analyser le marché
-        </button>
-        <span style="font-size:10px;color:var(--muted);">Analyse basée sur le modèle saisi</span>
-      </div>
-      <div id="market-result" style="margin-top:10px;"></div>
-    </div>
-
+    
     <div class="btn-row">
       <button class="btn btn-outline btn-full" onclick="printDiag()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="vertical-align:-2px;margin-right:4px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimer diagnostic</button>
       <button class="btn btn-success btn-full" onclick="saveDiagToParc()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14" style="vertical-align:-2px;margin-right:4px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Créer le PC</button>
@@ -965,9 +964,7 @@ function showApp() {
   updateCount();
   document.getElementById('d-date').value = new Date().toISOString().split('T')[0];
   setTimeout(initCPUAutocomplete, 200);
-  if(typeof apiLoadParc!=='undefined'){
-    apiLoadParc().then(function(ok){if(!ok){parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();}checkHash();});
-  } else { parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();checkHash(); }
+  checkHash();
 }
 
 function doLogout() {
@@ -1330,8 +1327,12 @@ function doPrintLabel(labelHTML) {
 var diagVerdict = 'vente';
 function setVerdict(status, btn) {
   diagVerdict = status;
-  ['ok','ko','reserve'].forEach(function(b){ document.getElementById('v-'+b).classList.remove('active'); });
-  document.getElementById('v-'+btn).classList.add('active');
+  ['ok','amv','ko','reserve'].forEach(function(b){
+    var el=document.getElementById('v-'+b);
+    if(el){el.classList.remove('active');if(b==='amv'){el.style.background='#fffbeb';el.style.color='#d97706';}}
+  });
+  var el=document.getElementById('v-'+btn);
+  if(el){el.classList.add('active');if(btn==='amv'){el.style.background='#d97706';el.style.color='#fff';}}
 }
 
 function dv(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
@@ -2003,6 +2004,65 @@ function showUploadPage(pcId) {
   };
 }
 
+
+// ══ POST-RENDER PATCHES ══
+// Add AMV verdict button dynamically
+setTimeout(function() {
+  var vok = document.getElementById('v-ok');
+  if (vok && !document.getElementById('v-amv')) {
+    var amvBtn = document.createElement('button');
+    amvBtn.id = 'v-amv';
+    amvBtn.className = 'verdict-btn';
+    amvBtn.setAttribute('style','font-size:10px;border:2px solid #d97706;color:#d97706;background:#fffbeb;border-radius:8px;padding:9px;cursor:pointer;font-family:Montserrat,Arial,sans-serif;font-weight:700;flex:1;');
+    amvBtn.textContent = 'À mettre en vente';
+    amvBtn.onclick = function(){ setVerdict('amv','amv'); };
+    vok.parentNode.insertBefore(amvBtn, vok.nextSibling);
+  }
+  // Add amv to all status selects
+  ['f-status','edit-status','de-status'].forEach(function(id) {
+    var sel = document.getElementById(id);
+    if (sel && !sel.querySelector('[value="amv"]')) {
+      var opt = document.createElement('option');
+      opt.value = 'amv'; opt.textContent = 'À mettre en vente';
+      sel.insertBefore(opt, sel.firstChild);
+    }
+  });
+}, 500);
+
+// Tooltip via JS (CSS ::after on data-tip)
+document.addEventListener('mouseover', function(e) {
+  var btn = e.target.closest('[data-tip]');
+  if (!btn) return;
+  var tip = btn._tipEl;
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.style.cssText = 'position:fixed;background:#1a1a2e;color:#fff;font-size:10px;font-weight:600;padding:5px 9px;border-radius:6px;white-space:nowrap;z-index:99999;pointer-events:none;font-family:Montserrat,Arial,sans-serif;transition:opacity .15s;';
+    tip.textContent = btn.getAttribute('data-tip');
+    document.body.appendChild(tip);
+    btn._tipEl = tip;
+  }
+  var rect = btn.getBoundingClientRect();
+  tip.style.left = (rect.left + rect.width/2 - tip.offsetWidth/2) + 'px';
+  tip.style.top = (rect.top - tip.offsetHeight - 8) + 'px';
+  tip.style.opacity = '1';
+});
+document.addEventListener('mouseout', function(e) {
+  var btn = e.target.closest('[data-tip]');
+  if (btn && btn._tipEl) btn._tipEl.style.opacity = '0';
+});
+
+// Add data-tip via renderParc patch
+var _origRenderParc = renderParc;
+renderParc = function() {
+  _origRenderParc.apply(this, arguments);
+  // Add tooltips to newly created buttons
+  document.querySelectorAll('.btn-warning.btn-sm:not([data-tip])').forEach(function(b){ b.setAttribute('data-tip','Aperçu étiquette'); });
+  document.querySelectorAll('.btn-outline.btn-sm:not([data-tip])').forEach(function(b){ if(b.onclick&&b.onclick.toString().includes('editPC')) b.setAttribute('data-tip','Modifier'); });
+  document.querySelectorAll('.btn-purple.btn-sm:not([data-tip])').forEach(function(b){ b.setAttribute('data-tip','Diagnostic'); });
+  document.querySelectorAll('.btn-primary.btn-sm:not([data-tip])').forEach(function(b){ b.setAttribute('data-tip','Télécharger PNG'); });
+  document.querySelectorAll('.btn-danger.btn-sm:not([data-tip])').forEach(function(b){ b.setAttribute('data-tip','Supprimer'); });
+};
+
 window.addEventListener('hashchange',checkHash);
 
 
@@ -2061,8 +2121,7 @@ function analyzeMarket() {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({model: model})
   })
-  .then(function(r){ return r.json(); })
-  .then(function(data) {
+  .then(function(r){ return r.json(); }) .then(function(data) {
     btn.disabled = false;
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:-2px;margin-right:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Analyser le marché';
     try {
