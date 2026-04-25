@@ -1,6 +1,5 @@
 "use client";
 import { useEffect } from "react";
-
 const CSS = `
 :root {
   --blue:#0A3782; --cyan:#0096C8; --gold:#F4B800;
@@ -12,7 +11,7 @@ const CSS = `
 body{font-family:"Montserrat",Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
 /* ── LOGIN ── */
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0A3782 0%,#0096C8 100%);}
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0A3782;}
 .login-box{background:#fff;border-radius:20px;padding:40px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:slideUp .4s ease;}
 .login-logo{display:flex;justify-content:center;margin-bottom:28px;}
 .login-logo img{height:52px;width:auto;}
@@ -23,7 +22,7 @@ body{font-family:"Montserrat",Arial,sans-serif;background:var(--bg);color:var(--
 .login-field input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:"Montserrat",Arial,sans-serif;outline:none;transition:.2s;}
 .login-field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,55,130,.1);}
 .login-error{color:var(--red);font-size:11px;text-align:center;margin-bottom:10px;min-height:16px;}
-.login-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Montserrat",Arial,sans-serif;transition:.2s;}
+.login-btn{width:100%;padding:11px;background:#0A3782;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Montserrat",Arial,sans-serif;transition:.15s;}
 .login-btn:hover{background:#082d6a;transform:translateY(-1px);}
 .login-users{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
 .login-users-title{font-size:10px;color:var(--muted);text-align:center;margin-bottom:8px;font-weight:600;text-transform:uppercase;}
@@ -31,7 +30,7 @@ body{font-family:"Montserrat",Arial,sans-serif;background:var(--bg);color:var(--
 .login-user-chip:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
 
 /* ── NAV ── */
-.nav{background:var(--blue);display:flex;align-items:center;padding:0 20px;height:54px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.nav{background:#0A3782;display:flex;align-items:center;padding:0 20px;height:50px;position:sticky;top:0;z-index:200;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .nav-logo{height:36px;width:auto;margin-right:16px;}
 .nav-tab{padding:0 15px;height:54px;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.6);cursor:pointer;border-bottom:3px solid transparent;letter-spacing:.04em;white-space:nowrap;transition:.15s;gap:5px;}
 .nav-tab:hover{color:#fff;}
@@ -46,7 +45,7 @@ body{font-family:"Montserrat",Arial,sans-serif;background:var(--bg);color:var(--
 .main{max-width:1400px;margin:0 auto;padding:20px;}
 
 /* ── CARDS ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;animation:fadeIn .3s ease;}
+.card{background:var(--card);border:1px solid #e8eaed;border-radius:10px;padding:14px 16px;margin-bottom:10px;animation:fadeIn .3s ease;}
 .card-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
 label{font-size:11px;color:#555;display:block;margin-bottom:2px;margin-top:6px;}
 label:first-of-type{margin-top:0;}
@@ -67,11 +66,11 @@ textarea{resize:vertical;min-height:40px;}
 
 /* ── BUTTONS ── */
 .btn{padding:7px 14px;font-size:11px;font-weight:700;border-radius:8px;border:none;cursor:pointer;font-family:"Montserrat",Arial,sans-serif;transition:.15s;display:inline-flex;align-items:center;gap:5px;justify-content:center;white-space:nowrap;}
-.btn:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.15);}
-.btn:active{transform:translateY(0);}
+.btn:hover{opacity:.92;}
+
 .btn-primary{background:var(--blue);color:#fff;}
 .btn-success{background:var(--green);color:#fff;}
-.btn-warning{background:var(--gold);color:var(--blue);}
+.btn-warning{background:#e8f0fb;color:var(--blue);border:1.5px solid #c5d5f0;}
 .btn-danger{background:var(--red);color:#fff;}
 .btn-purple{background:var(--purple);color:#fff;}
 .btn-outline{background:#fff;color:var(--blue);border:1.5px solid var(--blue);}
@@ -119,7 +118,7 @@ textarea{resize:vertical;min-height:40px;}
 .parc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;animation:fadeIn .3s ease;}
 .parc-title{font-size:20px;font-weight:900;color:var(--blue);}
 .parc-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;}
+.stat-card{background:#fff;border:1px solid #e8eaed;border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:10px;}
 .stat-num{font-size:22px;font-weight:900;color:var(--blue);}
 .stat-label{font-size:10px;color:var(--muted);font-weight:600;}
 .filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
@@ -130,9 +129,9 @@ textarea{resize:vertical;min-height:40px;}
 .filter-btn.f-reserve.active{background:var(--purple);border-color:var(--purple);}
 .filter-btn.f-vendu.active{background:var(--red);border-color:var(--red);}
 .pc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;}
-.pc-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:.2s;animation:slideUp .3s ease;}
+.pc-card{background:#fff;border:1px solid #e8eaed;border-radius:10px;overflow:hidden;transition:.2s;animation:slideUp .3s ease;}
 .pc-card:hover{box-shadow:0 8px 24px rgba(10,55,130,.12);transform:translateY(-2px);}
-.pc-card-head{background:var(--blue);padding:11px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.pc-card-head{background:#0A3782;padding:10px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .pc-card-model{font-size:11px;font-weight:800;color:#fff;line-height:1.3;}
 .pc-card-ref{font-size:8px;color:rgba(255,255,255,.65);margin-top:2px;font-family:monospace;}
 .pc-status-badge{padding:3px 9px;border-radius:10px;font-size:9px;font-weight:700;flex-shrink:0;white-space:nowrap;}
@@ -160,7 +159,7 @@ textarea{resize:vertical;min-height:40px;}
 .pc-card-footer{padding:9px 13px;border-top:1px solid #f0f0f0;display:flex;gap:5px;flex-wrap:wrap;}
 
 /* ── DIAG ── */
-.diag-section{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;animation:fadeIn .3s ease;}
+.diag-section{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:14px 16px;margin-bottom:10px;animation:fadeIn .3s ease;}
 .diag-section-title{font-size:12px;font-weight:800;color:var(--blue);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #e8f0f5;display:flex;align-items:center;gap:6px;}
 .diag-table{width:100%;border-collapse:collapse;}
 .diag-table td{padding:5px 8px;border:1px solid var(--border);font-size:11px;}
@@ -172,15 +171,15 @@ textarea{resize:vertical;min-height:40px;}
 .cb-item input[type=checkbox]{width:14px;height:14px;accent-color:var(--blue);cursor:pointer;}
 .verdict-btns{display:flex;gap:8px;margin-top:8px;}
 .verdict-btn{flex:1;padding:9px;border-radius:8px;border:2px solid;font-size:11px;font-weight:700;cursor:pointer;font-family:"Montserrat",Arial,sans-serif;transition:.15s;}
-.verdict-btn.ok{border-color:var(--green);color:var(--green);background:#f0fdf4;}
+.verdict-btn.ok{border-color:#86efac;color:#15803d;background:#f0fdf4;}
 .verdict-btn.ok.active,.verdict-btn.ok:hover{background:var(--green);color:#fff;}
-.verdict-btn.ko{border-color:var(--red);color:var(--red);background:#fef2f2;}
+.verdict-btn.ko{border-color:#fca5a5;color:#b91c1c;background:#fef2f2;}
 .verdict-btn.ko.active,.verdict-btn.ko:hover{background:var(--red);color:#fff;}
-.verdict-btn.reserve{border-color:var(--purple);color:var(--purple);background:#f5f3ff;}
+.verdict-btn.reserve{border-color:#c4b5fd;color:#6d28d9;background:#f5f3ff;}
 .verdict-btn.reserve.active,.verdict-btn.reserve:hover{background:var(--purple);color:#fff;}
 
 /* ── PRICE CALC ── */
-.price-calc{background:linear-gradient(135deg,#f0f7ff,#e8f4fd);border:1px solid #bee3f8;border-radius:10px;padding:12px 14px;margin-top:8px;}
+.price-calc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-top:8px;}
 .price-calc-title{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
 .price-calc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .price-calc-item{text-align:center;}
@@ -225,12 +224,28 @@ textarea{resize:vertical;min-height:40px;}
 .empty-state{text-align:center;padding:50px 20px;color:#ccc;grid-column:1/-1;}
 .empty-icon{font-size:48px;margin-bottom:12px;}
 
+
+
+/* Diagnostic attachments */
+.cb-row{display:flex;align-items:center;gap:6px;padding:3px 0;}
+.cb-label{display:flex;align-items:center;gap:6px;font-size:11px;color:#444;cursor:pointer;flex:1;}
+.cb-attach-btn{width:22px;height:22px;border-radius:5px;border:1px solid #e0e4ee;background:#f8fafc;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s;position:relative;}
+.cb-attach-btn:hover{border-color:#0A3782;background:#f0f4fb;}
+.cb-attach-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.cb-attach-count{background:#0A3782;color:#fff;font-size:8px;font-weight:700;border-radius:8px;padding:1px 4px;margin-left:2px;display:none;}
+.cb-attach-count.has-files{display:inline;}
+
+/* Tooltips */
+[title]{position:relative;cursor:pointer;}
+.btn[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;font-size:10px;font-weight:600;padding:4px 8px;border-radius:5px;white-space:nowrap;pointer-events:none;z-index:9999;font-family:"Montserrat",Arial,sans-serif;}
+.btn[title]:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1a1a2e;pointer-events:none;z-index:9999;}
+
 /* ── ANIMATIONS ── */
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 
-.stat-card:hover{animation:pulse .4s ease;}
+.stat-card:hover{box-shadow:0 4px 12px rgba(10,55,130,.1);}
 `;
 const BODY_HTML = `
 
@@ -341,18 +356,95 @@ const BODY_HTML = `
 
     <div class="diag-section">
       <div class="diag-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Diag Hardware</div>
-      <div class="cb-grid">
-        <label class="cb-item"><input type="checkbox" id="d-memtest"> Memtest ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-smart"> S.M.A.R.T Life ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-screenshot"> Copie d'écran ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-firmware"> Firmware ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-bios"> Bios version ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-pile"> Pile Bios ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-depoussierage"> Dépoussiérage ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-thermique"> Entretien thermique ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-temp"> Température CPU/GPU ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-batterie"> Batterie testée ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-plasturgie"> État plasturgie ✓</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-memtest" style="width:14px;height:14px;accent-color:#0A3782;"> Memtest</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-memtest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-memtest', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-memtest">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-smart" style="width:14px;height:14px;accent-color:#0A3782;"> S.M.A.R.T Life</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-smart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-smart', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-smart">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-screenshot" style="width:14px;height:14px;accent-color:#0A3782;"> Copie d'écran</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-screenshot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-screenshot', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-screenshot">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-firmware" style="width:14px;height:14px;accent-color:#0A3782;"> Firmware</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-firmware">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-firmware', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-firmware">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-bios" style="width:14px;height:14px;accent-color:#0A3782;"> Bios version</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-bios">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-bios', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-bios">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-pile" style="width:14px;height:14px;accent-color:#0A3782;"> Pile Bios</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-pile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-pile', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-pile">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-depoussierage" style="width:14px;height:14px;accent-color:#0A3782;"> Dépoussiérage</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-depoussierage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-depoussierage', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-depoussierage">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-thermique" style="width:14px;height:14px;accent-color:#0A3782;"> Entretien thermique</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-thermique">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-thermique', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-thermique">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-temp" style="width:14px;height:14px;accent-color:#0A3782;"> Température CPU/GPU</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-temp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-temp', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-temp">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-batterie" style="width:14px;height:14px;accent-color:#0A3782;"> Batterie testée</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-batterie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-batterie', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-batterie">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-plasturgie" style="width:14px;height:14px;accent-color:#0A3782;"> État plasturgie</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-plasturgie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-plasturgie', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-plasturgie">0</span>
+        </div>
       </div>
       <div style="margin-top:8px;" class="r2">
         <div>
@@ -383,15 +475,71 @@ const BODY_HTML = `
 
     <div class="diag-section">
       <div class="diag-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:-3px;margin-right:6px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Diag Système</div>
-      <div class="cb-grid">
-        <label class="cb-item"><input type="checkbox" id="d-1ere"> 1ère mise en service ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-demarrage"> Démarrage rapide désactivé ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-pilotes"> Vérification pilotes ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-alim"> Vérif. gestion alimentation ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-antivirus"> Antivirus et Firewall ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-logiciels"> Logiciels installés ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-nettoyage"> Nettoyage disque ✓</label>
-        <label class="cb-item"><input type="checkbox" id="d-activation"> Activation Windows ✓</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:8px;">
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-1ere" style="width:14px;height:14px;accent-color:#0A3782;"> 1ère mise en service</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-1ere">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-1ere', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-1ere">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-demarrage" style="width:14px;height:14px;accent-color:#0A3782;"> Démarrage rapide désactivé</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-demarrage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-demarrage', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-demarrage">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-pilotes" style="width:14px;height:14px;accent-color:#0A3782;"> Vérification pilotes</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-pilotes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-pilotes', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-pilotes">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-alim" style="width:14px;height:14px;accent-color:#0A3782;"> Vérif. alimentation</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-alim">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-alim', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-alim">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-antivirus" style="width:14px;height:14px;accent-color:#0A3782;"> Antivirus et Firewall</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-antivirus">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-antivirus', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-antivirus">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-logiciels" style="width:14px;height:14px;accent-color:#0A3782;"> Logiciels installés</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-logiciels">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-logiciels', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-logiciels">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-nettoyage" style="width:14px;height:14px;accent-color:#0A3782;"> Nettoyage disque</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-nettoyage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-nettoyage', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-nettoyage">0</span>
+        </div>
+        <div class="cb-row">
+          <label class="cb-label"><input type="checkbox" id="d-activation" style="width:14px;height:14px;accent-color:#0A3782;"> Activation Windows</label>
+          <div class="cb-attach-btn" title="Joindre un fichier" id="btn-attach-d-activation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            <input type="file" accept="image/*,.pdf,.doc,.docx" multiple onchange="addDiagAttachment('d-activation', this)">
+          </div>
+          <span class="cb-attach-count" id="count-d-activation">0</span>
+        </div>
       </div>
       <div style="margin-top:6px;"><label>Logiciels installés</label><input type="text" id="d-logiciels-list" placeholder="Firefox, VLC, 7zip, LibreOffice..."></div>
       <div style="margin-top:6px;"><label>Observations système</label><textarea id="d-obs-sys" rows="2" placeholder="Remarques..."></textarea></div>
@@ -605,7 +753,15 @@ const BODY_HTML = `
 <!-- MODAL DIAG VIEW -->
 <div class="modal-overlay" id="diag-view-modal" style="display:none;">
   <div class="modal modal-lg">
-    <div class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" style="vertical-align:-3px;margin-right:5px;"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Diagnostic</div>
+    <div class="modal-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--blue);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+        Diagnostic
+      </div>
+      <button class="btn btn-outline btn-sm" title="Modifier ce diagnostic" onclick="editDiagById()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:-2px;margin-right:4px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier
+      </button>
+    </div>
     <div id="diag-view-content"></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('diag-view-modal')">Fermer</button>
@@ -805,16 +961,9 @@ function showApp() {
   document.getElementById('nav-username').textContent = currentUser.name;
   document.getElementById('nav-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
   document.getElementById('d-date').value = new Date().toISOString().split('T')[0];
-  // Try API first, fallback to localStorage
   if (typeof apiLoadParc !== 'undefined') {
-    apiLoadParc().then(function(ok) {
-      if (!ok) { parc = JSON.parse(localStorage.getItem('ldlc_parc')||'[]'); updateCount(); }
-      checkHash();
-    });
-  } else {
-    parc = JSON.parse(localStorage.getItem('ldlc_parc')||'[]');
-    updateCount(); checkHash();
-  }
+    apiLoadParc().then(function(ok){ if(!ok){parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');updateCount();} checkHash(); });
+  } else { parc=JSON.parse(localStorage.getItem('ldlc_parc')||'[]'); updateCount(); checkHash(); }
 }
 
 function doLogout() {
@@ -1114,17 +1263,10 @@ function buildDiagData() {
 function saveDiagToParc() {
   if (!dv('d-model')) { alert('Remplis au moins le nom du modele'); return; }
   var pc = buildDiagData();
-  toast('Sauvegarde...');
-  if (typeof apiSavePC !== 'undefined') {
-    apiSavePC(pc).then(function(ok) {
-      parc.unshift(pc); saveParc(); updateCount();
-      toast(ok ? 'PC cree et synchronise !' : 'PC cree (hors ligne)');
-      showTab('parc');
-    });
-  } else {
-    parc.unshift(pc); saveParc(); updateCount();
-    toast('PC cree !'); showTab('parc');
-  }
+  parc.unshift(pc);
+  saveParc(); updateCount();
+  toast('PC cree et ajoute au parc !');
+  showTab('parc');
 }
 
 function printDiag() {
@@ -1247,6 +1389,28 @@ function saveToParc(){
 
 // ══ PARC ══
 function saveParc(){localStorage.setItem('ldlc_parc',JSON.stringify(parc));}
+
+function buildAttachPreview(attachments) {
+  var html = '';
+  var keys = Object.keys(attachments||{});
+  var total = keys.reduce(function(s,k){return s+(attachments[k]?attachments[k].length:0);},0);
+  if(!total) return '';
+  html += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid #e8eaed;">';
+  html += '<div style="font-size:10px;font-weight:700;color:#555;margin-bottom:6px;">Pieces jointes ('+total+')</div>';
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+  keys.forEach(function(k){
+    var files = attachments[k]||[];
+    files.forEach(function(f){
+      if(f.type && f.type.startsWith('image/')){
+        html += '<img src="'+f.data+'" style="width:50px;height:50px;object-fit:cover;border-radius:5px;border:1px solid #e0e4ee;cursor:pointer;" title="'+f.name+'">';
+      } else {
+        html += '<div style="background:#f0f4fb;border:1px solid #c5d5f0;border-radius:5px;padding:4px 8px;font-size:9px;font-weight:600;color:#0A3782;">'+f.name.substring(0,15)+'</div>';
+      }
+    });
+  });
+  html += '</div></div>';
+  return html;
+}
 function updateCount(){document.getElementById('parc-count').textContent=parc.length;}
 
 var STATUS_LABEL={vente:'En vente',atelier:'À l\\'atelier',reserve:'Réservé',vendu:'Vendu'};
@@ -1606,7 +1770,7 @@ function showUploadPage(pcId){
   var parcData=JSON.parse(localStorage.getItem('ldlc_parc')||'[]');
   var pc=parcData.find(function(p){return p.id===pcId;});
   document.body.innerHTML=[
-    '<div style="font-family:Montserrat,Arial,sans-serif;max-width:420px;margin:0 auto;padding:20px;min-height:100vh;background:#f0f2f7;">',
+    '<div style="font-family:Montserrat,Arial,sans-serif;max-width:420px;margin:0 auto;padding:20px;min-height:100vh;background:#f4f5f7;">',
     '<div style="background:#0A3782;border-radius:12px;padding:14px;margin-bottom:20px;text-align:center;">',
     '<img src="'+L_HEADER+'" style="height:40px;width:auto;">',
     '</div>',
@@ -1648,6 +1812,51 @@ function showUploadPage(pcId){
     '}',
     '<\\/script>'
   ].join('\\n');
+}
+
+
+// ══ DIAGNOSTIC ATTACHMENTS ══
+var diagAttachments = {}; // {checkId: [{name, type, data}]}
+
+function addDiagAttachment(checkId, input) {
+  var files = Array.from(input.files);
+  if (!diagAttachments[checkId]) diagAttachments[checkId] = [];
+  files.forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      diagAttachments[checkId].push({
+        name: file.name,
+        type: file.type,
+        data: e.target.result
+      });
+      updateAttachCount(checkId);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function updateAttachCount(checkId) {
+  var count = diagAttachments[checkId] ? diagAttachments[checkId].length : 0;
+  var el = document.getElementById('count-' + checkId);
+  if (el) {
+    el.textContent = count;
+    el.className = 'cb-attach-count' + (count > 0 ? ' has-files' : '');
+  }
+  var btn = document.getElementById('btn-attach-' + checkId);
+  if (btn && count > 0) {
+    btn.style.borderColor = '#0A3782';
+    btn.style.background = '#f0f4fb';
+  }
+}
+
+function renderDiagAttachmentButtons() {
+  // Reset all counts
+  var allIds = ['d-memtest','d-smart','d-screenshot','d-firmware','d-bios','d-pile',
+    'd-depoussierage','d-thermique','d-temp','d-batterie','d-plasturgie',
+    'd-1ere','d-demarrage','d-pilotes','d-alim','d-antivirus','d-logiciels',
+    'd-nettoyage','d-activation'];
+  allIds.forEach(function(id) { updateAttachCount(id); });
 }
 
 window.addEventListener('hashchange',checkHash);
@@ -1814,47 +2023,31 @@ document.head.appendChild(styleEl);
 
 // ══ API SYNC ══
 async function apiLoadParc() {
-  try {
-    var r = await fetch('/api/parc');
-    if (r.ok) { parc = await r.json(); localStorage.setItem('ldlc_parc',JSON.stringify(parc)); updateCount(); return true; }
-  } catch(e) {}
+  try { var r=await fetch('/api/parc'); if(r.ok){parc=await r.json();localStorage.setItem('ldlc_parc',JSON.stringify(parc));updateCount();return true;} } catch(e){}
   return false;
 }
 async function apiSavePC(pc) {
-  try { var r = await fetch('/api/parc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); if(r.ok){var s=await r.json();pc.id=s.id;return true;} } catch(e) {}
+  try { var r=await fetch('/api/parc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); if(r.ok){var s=await r.json();pc.id=s.id;return true;} } catch(e){}
   return false;
 }
 async function apiUpdatePC(pc) {
-  try { var r = await fetch('/api/parc',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); return r.ok; } catch(e) { return false; }
+  try { var r=await fetch('/api/parc',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pc)}); return r.ok; } catch(e){ return false; }
 }
 async function apiDeletePC(id) {
-  try { var r = await fetch('/api/parc',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}); return r.ok; } catch(e) { return false; }
+  try { var r=await fetch('/api/parc',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}); return r.ok; } catch(e){ return false; }
 }
-
-// Override sync-sensitive functions
-var _origSaveDiagToParc = saveDiagToParc;
 
 // ══ INIT ══
 initLogin();
 `;
-
 export default function Home() {
   useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = CSS;
-    document.head.appendChild(style);
-    const lnk = document.createElement("link");
-    lnk.rel = "stylesheet";
-    lnk.href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap";
-    document.head.appendChild(lnk);
+    const style = document.createElement("style"); style.textContent = CSS; document.head.appendChild(style);
+    const lnk = document.createElement("link"); lnk.rel="stylesheet"; lnk.href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"; document.head.appendChild(lnk);
     let loaded = 0;
-    const onLoad = () => { loaded++; if (loaded === 2) { const s = document.createElement("script"); s.textContent = APP_JS; document.body.appendChild(s); } };
-    const s1 = document.createElement("script");
-    s1.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-    s1.onload = onLoad; document.head.appendChild(s1);
-    const s2 = document.createElement("script");
-    s2.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-    s2.onload = onLoad; document.head.appendChild(s2);
+    const onLoad = () => { loaded++; if(loaded===2){ const s=document.createElement("script"); s.textContent=APP_JS; document.body.appendChild(s); } };
+    const s1=document.createElement("script"); s1.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"; s1.onload=onLoad; document.head.appendChild(s1);
+    const s2=document.createElement("script"); s2.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s2.onload=onLoad; document.head.appendChild(s2);
     return () => { try { document.head.removeChild(style); } catch(e){} };
   }, []);
   return <div dangerouslySetInnerHTML={{ __html: BODY_HTML }} />;
